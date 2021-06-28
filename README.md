@@ -1,2 +1,2 @@
-# usu-discord-bot
+# UsuBot
 UsuBot for discord.
