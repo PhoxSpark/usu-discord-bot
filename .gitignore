@@ -130,4 +130,7 @@ dmypy.json
 
 #Bot token
 token.*
-setting.ini
+settings.ini
+
+#MacOS
+.DS_Store

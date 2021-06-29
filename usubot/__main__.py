@@ -156,7 +156,7 @@ def token_settings_file(new_file:bool, token):
     if config['bot']['token'] == DEFAULT_TOKEN:
         abort = True
         log.error("Please, add the token on the 'settings.ini' file or with the flag '-t, --token'." +
-                  "For more information, please check the help '-h, --help' page.")
+                  " For more information, please check the help '-h, --help' page.")
 
     with open(SETTINGS_FILE, 'w') as f:
         config.write(f)
