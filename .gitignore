@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 #Bot token
-token.txt
+token.*
+setting.ini
