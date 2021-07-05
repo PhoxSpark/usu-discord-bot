@@ -1,70 +1,39 @@
 import os
-import logging
 import argparse
-import discord
 
 from configparser import ConfigParser
 
-global log
+import log
+import bot
 
 SETTINGS_FILE = "settings.ini"
 DEFAULT_TOKEN = '"Replace this text with your token (quotes too)"'
-VERBOSE_DEBUG = True
 
-client = discord.Client()
-
+logger = log.setup('usubot')
 
 def main(args):
     """
     """
     settings_check = check_settings_file()
+    settings_token_results = tuple()
+    exit_code = 0
+
+    #Check if settings file check was successful.
     if settings_check[0]:
-        log.error("Program can't continue without settings file.")
+        logger.error("Program can't continue without settings file.")
+        exit_code = 2
     else:
-        settings_innit_aborted = token_settings_file(settings_check[1], args.token)
-
-
-def initialize_logger(verbose):
-    """
-    Initialize logger, standard among codes.
-    Returns logging object.
-    """
-
-    logger = None       # Store the logger object and makes logs.
-    fh = None           # File handler.
-    ch = None           # Console handler.
-    formatter = None    # Format of the output.
-
-    try:
-        os.remove("debug.log")
-    except:
-        pass
+        logger.debug("Settings file correct.")
+        settings_token_results = token_settings_file(settings_check[1], args.token)
     
-    logger = logging.getLogger("logger")
-    logger.setLevel(logging.DEBUG)
-
-    fh = logging.FileHandler("debug.log")
-    fh.setLevel(logging.DEBUG)
-
-    if verbose:
-        if VERBOSE_DEBUG:
-            ch = logging.StreamHandler()
-            ch.setLevel(logging.DEBUG)
-        else:
-            ch = logging.StreamHandler()
-            ch.setLevel(logging.INFO)
+    #Check if token was found.
+    if settings_token_results[0]:
+        exit_code = 2
     else:
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.ERROR)
-
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
-
-    logger.addHandler(fh)
-    logger.addHandler(ch)
-    print(type(logger))
-    return logger
+        logger.debug("Settings file has ben initialized.")
+        exit_code = bot.connect_client(settings_token_results[1]) #This starts the bot.
+    
+    print(exit_code)
 
 
 def parse_arguments():
@@ -113,15 +82,15 @@ def check_settings_file():
 
     #Check if file exists. If not, try to create it.
     if os.path.exists(SETTINGS_FILE):
-        log.debug("'"+ SETTINGS_FILE + "' found.")
+        logger.debug("'"+ SETTINGS_FILE + "' found.")
     else:
-        log.debug("'"+ SETTINGS_FILE + "' not found.")
+        logger.debug("'"+ SETTINGS_FILE + "' not found.")
         try:
             open(SETTINGS_FILE, 'a').close()
             new_file = True
-            log.info("'"+ SETTINGS_FILE + "' created.")
+            logger.info("'"+ SETTINGS_FILE + "' created.")
         except PermissionError:
-            log.error("Permission error. Aborting...")
+            logger.error("Permission error. Aborting...")
             aborted = True
 
     #Return the results.
@@ -155,18 +124,16 @@ def token_settings_file(new_file:bool, token):
     #If the token now on the settings file is the default one, the program can't continue.
     if config['bot']['token'] == DEFAULT_TOKEN:
         abort = True
-        log.error("Please, add the token on the 'settings.ini' file or with the flag '-t, --token'." +
+        logger.error("Please, add the token on the 'settings.ini' file or with the flag '-t, --token'." +
                   " For more information, please check the help '-h, --help' page.")
 
     with open(SETTINGS_FILE, 'w') as f:
         config.write(f)
     
-    return abort
+    return (abort, config['bot']['token'])
     
 
 if __name__ == "__main__":
     args = parse_arguments()
-    log = initialize_logger(args.verbose)
-    log.debug("Arguments parsed and logger initialized.")
     main(args)
     
