@@ -5,6 +5,7 @@ log = logging.getLogger('usubot')
 
 def connect_client(token):
     """
+    Use the token and the Discord library to connect.
     """
 
     exit_code = 0
@@ -21,14 +22,19 @@ def connect_client(token):
 
 class UsuClient(discord.Client):
     """
+    Main UsuBot class to handle features.
     """
     async def on_ready(self):
         """
+        Message to show on console when ready.
         """
         print("Logged on as {0}! Check if that's correct!".format(self.user))
     
 
     async def on_message(self, message):
+        """
+        Log every message on the server connected.
+        """
         log.debug("{0.author}: {0.content}".format(message))
 
 if __name__ == "__main__":

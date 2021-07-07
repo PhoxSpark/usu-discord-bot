@@ -50,3 +50,6 @@ def setup(name, verbose=True):
     print(type(logger))
 
     return logger
+
+if __name__ == "__main__":
+    pass
