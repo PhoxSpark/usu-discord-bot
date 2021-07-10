@@ -9,11 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "js-cookie": "^2.2.1",
     "next": "11.0.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-cookie": "^4.0.3",
+    "react-dom": "17.0.2",
+    "react-modal": "^3.14.3",
+    "sass": "^1.33.0",
+    "typescript": "^4.3.5"
   },
   "devDependencies": {
+    "@types/react": "^17.0.13",
     "eslint": "7.29.0",
     "eslint-config-next": "11.0.1"
   }
