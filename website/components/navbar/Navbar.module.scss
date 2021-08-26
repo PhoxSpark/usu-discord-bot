@@ -1,11 +1,10 @@
 .background {
-  background-color: #18191c;
+  box-shadow: 0 0 5px 1px grey;
 
   .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
 
     ul {
       display: flex;

@@ -5,6 +5,7 @@ import Navlink from "./NavLink";
 
 import { useContext } from "react";
 import AuthContext from "contexts/auth";
+import Input from "components/input/Input";
 
 export default function Navbar() {
   const { user, isLoading, signIn, signOut } = useContext(AuthContext);
@@ -21,10 +22,10 @@ export default function Navbar() {
             <li>
               {isLoading ? (
                 <p>Loading...</p>
-              ) : user ? (
-                <a onClick={signOut}>Logout</a>
+              ) : !user ? (
+                <Input type="button" value="Login" onClick={signIn}/>
               ) : (
-                <a onClick={signIn}>Login</a>
+                <Input type="button" value="Logout" onClick={signOut}/>
               )}
             </li>
           </ul>
